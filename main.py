@@ -95,12 +95,12 @@ def main():
 
         sleep(0.25)
         sequence.append(get_random_color())
-        for item in sequence:
-            light_up(item)
+        for color in sequence:
+            light_up(color)
             sleep(0.1)
 
         temp_score = 0
-        for item in sequence:
+        for color in sequence:
             # Wait for event in queue to be mouse click or quit
             action = pygame.event.wait()
             while action.type != pygame.QUIT and action.type != pygame.MOUSEBUTTONDOWN:
@@ -110,14 +110,15 @@ def main():
                 run = False
                 break
             elif action.type == pygame.MOUSEBUTTONDOWN:
-                color = get_color_clicked(pygame.mouse.get_pos())
-                light_up(color)
+                color_clicked = get_color_clicked(pygame.mouse.get_pos())
+                light_up(color_clicked)
 
-                if color == item:
+                if color_clicked == color:
                     temp_score += 1
                     if temp_score > score:
                         score = temp_score
                 else:
+                    # Game over, show score and high score
                     try:
                         with open("high_score") as f:
                             high_score = int(f.read())
@@ -134,12 +135,12 @@ def main():
 
     pygame.quit()
 
-    # Save score if higher than high score
+    # Save score if it's a high score
     try:
         with open("high_score") as f:
             high_score = int(f.read())
     except FileNotFoundError:
-        # It is -1 so that the following if statement is always true and a save is created
+        # Set to -1 so that the following if statement is always true and a save is created
         high_score = -1
 
     if score > high_score:
