@@ -7,7 +7,6 @@ WIDTH, HEIGHT = 900, 700
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Simon")
 
-FPS = 60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
