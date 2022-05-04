@@ -84,6 +84,23 @@ def get_random_color():
     return colors[random.randint(0, 3)]
 
 
+def game_over(score):
+    # Saves score if it's a high score and prints game over message
+    try:
+        with open("high_score") as f:
+            high_score = int(f.read())
+    except FileNotFoundError:
+        save_score(score)
+        high_score = score
+
+    if score > high_score:
+        save_score(score)
+        high_score = score
+    
+    # I wanted to draw the text in the game window, but pygame makes it complicated for some reason
+    print(f"Game Over\n{score = }\n{high_score = }")
+
+
 def main():
     score = 0
     sequence = []
@@ -118,33 +135,11 @@ def main():
                     if temp_score > score:
                         score = temp_score
                 else:
-                    # Game over, show score and high score
-                    try:
-                        with open("high_score") as f:
-                            high_score = int(f.read())
-                    except FileNotFoundError:
-                        high_score = score
-
-                    if high_score < score:
-                        high_score = score
-
-                    # I wanted to draw the text in the game window, but pygame makes it complicated for some reason
-                    print(f"Game Over\n{score = }\n{high_score = }")
+                    game_over(score)
                     run = False
                     break
 
     pygame.quit()
-
-    # Save score if it's a high score
-    try:
-        with open("high_score") as f:
-            high_score = int(f.read())
-    except FileNotFoundError:
-        # Set to -1 so that the following if statement is always true and a save is created
-        high_score = -1
-
-    if score > high_score:
-        save_score(score)
 
 
 if __name__ == '__main__':
